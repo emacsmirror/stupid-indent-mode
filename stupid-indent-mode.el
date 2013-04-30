@@ -92,7 +92,7 @@
             (,(kbd "<backtab>") . stupid-outdent-line)
             (,(kbd "C-c <tab>") . stupid-indent-region)
             (,(kbd "C-c <backtab>") . stupid-outdent-region)
-            (,(kbd "<ret>") . stupid-indent-newline)
+            (,(kbd "<return>") . stupid-indent-newline)
             (,(kbd "C-c C-<tab>") . indent-according-to-mode)
             ))
 
