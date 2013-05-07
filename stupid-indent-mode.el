@@ -77,6 +77,22 @@
       (stupid-outdent-line))
     (forward-line 1)))
 
+(defun stupid-indent (begin end)
+  (interactive "r")
+  (if (use-region-p)
+      (progn
+        (stupid-indent-region begin end)
+        (setq deactivate-mark nil))
+    (stupid-indent-line)))
+
+(defun stupid-outdent (begin end)
+  (interactive "r")
+  (if (use-region-p)
+      (progn
+        (stupid-outdent-region begin end)
+        (setq deactivate-mark nil))
+    (stupid-outdent-line)))
+
 (defun stupid-indent-newline ()
   (interactive)
   (newline)
@@ -88,8 +104,8 @@
   :lighter "/SI"
   :global nil
   :keymap `(
-            (,(kbd "<tab>") . stupid-indent-line)
-            (,(kbd "<backtab>") . stupid-outdent-line)
+            (,(kbd "<tab>") . stupid-indent)
+            (,(kbd "<backtab>") . stupid-outdent)
             (,(kbd "C-c <tab>") . stupid-indent-region)
             (,(kbd "C-c <backtab>") . stupid-outdent-region)
             (,(kbd "<return>") . stupid-indent-newline)
