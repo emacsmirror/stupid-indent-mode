@@ -40,8 +40,7 @@
 (defcustom stupid-indent-level 2
   "Indentation level for stupid-indent-mode")
 
-(defun stupid-indent-line ()
-  (interactive)
+(defun %stupid-force-indent-line ()
   (let (col)
     (save-excursion
       (beginning-of-line-text)
@@ -49,6 +48,15 @@
       (indent-line-to col))
     (when (< (current-column) col)
       (beginning-of-line-text))))
+
+(defun stupid-indent-line ()
+  (interactive)
+  (let ((bt (save-excursion
+              (beginning-of-line-text)
+              (current-column))))
+    (if (< (current-column) bt)
+        (beginning-of-line-text)
+      (%stupid-force-indent-line))))
 
 (defun stupid-outdent-line ()
   (interactive)
@@ -65,7 +73,7 @@
   (goto-char start)
   (while (< (point) stop)
     (unless (and (bolp) (eolp))
-      (stupid-indent-line))
+      (%stupid-force-indent-line))
     (forward-line 1)))
 
 (defun stupid-outdent-region (start stop)
@@ -80,7 +88,7 @@
 (defun stupid-indent (begin end)
   (interactive "r")
   (if (use-region-p)
-      (progn
+      (save-excursion
         (stupid-indent-region begin end)
         (setq deactivate-mark nil))
     (stupid-indent-line)))
@@ -88,7 +96,7 @@
 (defun stupid-outdent (begin end)
   (interactive "r")
   (if (use-region-p)
-      (progn
+      (save-excursion
         (stupid-outdent-region begin end)
         (setq deactivate-mark nil))
     (stupid-outdent-line)))
