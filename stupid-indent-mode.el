@@ -103,8 +103,11 @@
 
 (defun stupid-indent-newline ()
   (interactive)
-  (newline)
-  (indent-relative))
+  (let ((col (save-excursion
+               (beginning-of-line-text)
+               (current-column))))
+    (newline)
+    (indent-to-column col)))
 
 (define-minor-mode stupid-indent-mode
   "Stupid indent mode is just plain stupid."
