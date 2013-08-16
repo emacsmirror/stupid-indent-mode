@@ -103,6 +103,11 @@
 
 (defun stupid-indent-newline ()
   (interactive)
+  (when (< (point)
+           (save-excursion
+             (beginning-of-line-text)
+             (point)))
+    (beginning-of-line-text))
   (let ((col (save-excursion
                (beginning-of-line-text)
                (current-column))))
@@ -121,7 +126,10 @@
             (,(kbd "C-c <backtab>") . stupid-outdent-region)
             (,(kbd "<return>") . stupid-indent-newline)
             (,(kbd "C-c C-<tab>") . indent-according-to-mode)
-            ))
+            )
+  (when stupid-indent-mode
+    (add-hook 'write-contents-functions
+              'delete-trailing-whitespace)))
 
 (provide 'stupid-indent-mode)
 ;;; stupid-indent-mode.el ends here
